@@ -2,5 +2,13 @@
   "skill-creator": {
     "repo": "https://github.com/anthropics/skills.git",
     "path": "skills/skill-creator"
+  },
+  "humanizer": {
+    "repo": "https://github.com/blader/humanizer.git",
+    "path": "."
+  },
+  "ui-ux-pro-max": {
+    "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git",
+    "path": "."
   }
 }
