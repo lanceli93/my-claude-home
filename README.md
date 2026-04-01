@@ -40,7 +40,7 @@ Third-party skills I use. Install via `git clone` into `~/.claude/skills/`.
 
 ### ui-ux-pro-max
 
-- **Repo**: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+- **Repo**: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/main/.claude/skills/ui-ux-pro-max
 - **Install**: `npm install -g uipro-cli && cd <project> && uipro init --ai claude` (per-project) or move to `~/.claude/skills/` for global
 - AI-driven UI/UX design intelligence: 67 styles, 161 industry reasoning rules, 57 font pairings
 - Auto-generates complete design system (pattern + style + colors + typography) based on product type
