@@ -8,9 +8,7 @@ My Claude Code configurations and skills, for easy setup on new machines.
 config/
   CLAUDE.md                  # Global instructions (~/.claude/CLAUDE.md)
   settings.template.json     # Settings template — fill in secrets before use
-skills/
-  openclaw/                  # Custom skill: web scraping assistant
-  skill-upgrade-helper/      # Custom skill: registry-based skill installer/upgrader
+skill-upgrade-helper/        # Bundled skill: registry-based skill installer/upgrader
 ```
 
 ## Setup
@@ -18,25 +16,18 @@ skills/
 1. Clone this repo
 2. Copy `config/CLAUDE.md` to `~/.claude/CLAUDE.md`
 3. Copy `config/settings.template.json` to `~/.claude/settings.json`, fill in API keys
-4. Copy or symlink `skills/*` to `~/.claude/skills/`
+4. Copy or symlink `skill-upgrade-helper/` to `~/.claude/skills/skill-upgrade-helper`
 5. Install custom & community skills (see below)
 
 ## Custom Skills
 
 ### Bundled in this repo
 
-Skills included directly in the `skills/` directory.
-
-#### openclaw
-
-- Web scraping assistant
-- Copy to `~/.claude/skills/openclaw`
-
 #### skill-upgrade-helper
 
 - Registry-based skill installer and upgrader — manage all your skills from one place
 - Commands: `list`, `add`, `remove`, `update`, `update --all`
-- Copy to `~/.claude/skills/skill-upgrade-helper`
+- Install: `cp -r skill-upgrade-helper ~/.claude/skills/skill-upgrade-helper`
 
 ### Standalone repos
 
