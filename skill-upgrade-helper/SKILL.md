@@ -9,11 +9,13 @@ Manage skills from a curated remote catalog. Supports user-level and project-lev
 
 ## When this skill is triggered
 
-**Step 1: Locate the upgrade script.** The script is at `scripts/upgrade.py` relative to this skill's directory. Find it by running:
+**Step 1: Locate the upgrade script.** The script is at `scripts/upgrade.py` relative to this skill's directory. Find it by searching **project-level directories first, then user-level**:
 
 ```bash
-find ~/.claude/skills ~/.kiro/skills .claude/skills .kiro/skills -path "*/skill-upgrade-helper/scripts/upgrade.py" 2>/dev/null | head -1
+find .kiro/skills .claude/skills ~/.kiro/skills ~/.claude/skills -path "*/skill-upgrade-helper/scripts/upgrade.py" 2>/dev/null | head -1
 ```
+
+This order ensures that when running inside a project, the project-level copy is preferred over the user-level one.
 
 Save the result as `SCRIPT_PATH` for subsequent steps. If nothing is found, tell the user the skill-upgrade-helper is not installed.
 
