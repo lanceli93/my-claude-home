@@ -1,4 +1,12 @@
 {
+  "aws-excalidraw-diagram": {
+    "repo": "https://github.com/lanceli93/aws-excalidraw-diagram.git",
+    "path": "aws-excalidraw-diagram"
+  },
+  "aws-html-slides": {
+    "repo": "https://github.com/lanceli93/aws-html-slides.git",
+    "path": "aws-html-slides"
+  },
   "skill-creator": {
     "repo": "https://github.com/anthropics/skills.git",
     "path": "skills/skill-creator"

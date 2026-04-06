@@ -28,6 +28,7 @@ skill-upgrade-helper/        # Bundled skill: registry-based skill installer/upg
 - Registry-based skill installer and upgrader — manage all your skills from one place
 - Commands: `list`, `add`, `remove`, `update`, `update --all`
 - Install: `cp -r skill-upgrade-helper ~/.claude/skills/skill-upgrade-helper`
+- **Note**: `registry.json` should stay in sync with the skills listed in this README (both custom and community). When adding or removing a skill here, update the registry accordingly.
 
 ### Standalone repos
 
