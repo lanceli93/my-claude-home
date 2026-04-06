@@ -11,13 +11,13 @@ The upgrade script is at `~/.claude/skills/skill-upgrade-helper/scripts/upgrade.
 
 ## When this skill is triggered
 
-Immediately run the list command to get current state, then present it to the user:
+**Step 1: Fetch current state.** Run this command immediately:
 
 ```bash
 uv run ~/.claude/skills/skill-upgrade-helper/scripts/upgrade.py list --json
 ```
 
-The JSON output has this shape:
+**Step 2: Parse the JSON output.** The output looks like:
 
 ```json
 {
@@ -31,35 +31,42 @@ The JSON output has this shape:
 }
 ```
 
-### Present the skill list
+**Step 3: Present ALL skills from the JSON to the user.** You MUST list every single skill from the `skills` object — do not skip or filter any. Format as a table:
 
-Show the user a formatted table like:
+- If `installed` is empty → status is "not installed"
+- If `installed` contains `"user"` → show "✓ user"
+- If `installed` contains a path → show "✓ project"
+
+Example:
 
 ```
-| #  | Skill              | Status               |
-|----|--------------------|----------------------|
-| 1  | skill-creator      | ✓ user               |
-| 2  | humanizer          | ✓ user  ✓ project    |
-| 3  | aws-html-slides    | not installed         |
+| #  | Skill                | Status               |
+|----|----------------------|----------------------|
+| 1  | aws-excalidraw-diagram | ✓ user             |
+| 2  | aws-html-slides      | not installed         |
+| 3  | humanizer            | ✓ user  ✓ project    |
+| 4  | skill-creator        | ✓ user               |
+| 5  | ui-ux-pro-max        | not installed         |
 ```
 
-Then ask the user:
-1. **Which skills** to install or update (by number, name, or "all")
-2. **Where** to install: user level, project level, or both (only offer project if `project_root` is not null)
+**Step 4: Ask the user two questions:**
 
-### Execute the updates
+1. Which skills to install or update? (by number, name, or "all")
+2. Where to install? Only offer targets that apply:
+   - **User level** (`~/.claude/skills/`) — always available
+   - **Project level** (`.claude/skills/`) — only if `project_root` is not null
 
-For each skill + target combination the user chose, run:
+**Step 5: Execute.** For each skill + target the user chose, run:
 
 ```bash
 uv run ~/.claude/skills/skill-upgrade-helper/scripts/upgrade.py update <name> --target <user|project>
 ```
 
-Report the results as each completes.
+Report results as each completes.
 
-### Quick shortcuts
+## Quick shortcut
 
-If the user's intent is unambiguous (e.g. "update all my skills"), skip the selection step and run directly:
+If the user's intent is unambiguous (e.g. "update all my skills"), skip the selection and run:
 
 ```bash
 uv run ~/.claude/skills/skill-upgrade-helper/scripts/upgrade.py update --all --target user
