@@ -17,6 +17,12 @@ find .kiro/skills .claude/skills ~/.kiro/skills ~/.claude/skills -path "*/skill-
 
 Save the result as `SCRIPT_PATH`. If nothing is found, tell the user the skill-upgrade-helper is not installed.
 
+**Step 1b: Detect the current config directory.** Look at `SCRIPT_PATH` to determine if we are running under `.claude` or `.kiro`. For example:
+- `.../.claude/skills/skill-upgrade-helper/scripts/upgrade.py` → config dir is `.claude`
+- `.../.kiro/skills/skill-upgrade-helper/scripts/upgrade.py` → config dir is `.kiro`
+
+Save this as `CONFIG_DIR` (either `.claude` or `.kiro`). This determines which `available_targets` to use — the user should NOT be asked to choose between `.claude` and `.kiro`.
+
 **Step 2: Fetch current state.** Run:
 
 ```bash
@@ -34,16 +40,11 @@ uv run <SCRIPT_PATH> list --json
     {"label": "project (.claude)", "path": "/path/to/project/.claude/skills"},
     {"label": "project (.kiro)", "path": "/path/to/project/.kiro/skills"}
   ],
-  "skills": {
-    "skill-name": {
-      "repo": "https://github.com/...",
-      "installed": ["user", "/path/to/project"]
-    }
-  }
+  "skills": { ... }
 }
 ```
 
-`available_targets` lists every skills directory that exists on this machine. There may be 1 to 4 entries depending on which config dirs (`.claude`, `.kiro`) exist at user and project levels.
+**Filter `available_targets`**: only keep entries whose label contains `CONFIG_DIR`. For example, if `CONFIG_DIR` is `.kiro`, keep only entries with `(.kiro)` in the label. This gives you the relevant targets for the current tool.
 
 **Step 4: Present ALL skills from the JSON to the user.** You MUST list every single skill from the `skills` object — do not skip or filter any. Format as a table:
 
@@ -66,30 +67,26 @@ Example:
 **Step 5: Ask the user two questions:**
 
 1. Which skills to install or update? (by number, name, or "all")
-2. Where to install? Present each entry from `available_targets` as a choice, showing the `label` field. Examples:
-   - If only one target exists, use it automatically without asking.
-   - If multiple targets exist (e.g. both `.claude` and `.kiro`), you MUST ask the user which one(s) to use. Do NOT pick one silently.
+2. Where to install? Present the **filtered** targets as simple level choices:
+   - **User level** — if a `user (CONFIG_DIR)` target exists
+   - **Project level** — if a `project (CONFIG_DIR)` target exists
+   - If only one filtered target exists, use it automatically without asking.
+   - If both user and project targets exist, ask the user to choose.
 
-**Step 6: Execute.** For each skill + target the user chose, run the update command using the `path` field from the chosen `available_targets` entry:
+**Step 6: Execute.** For each skill + target the user chose, run the update command using the `path` field from the matching `available_targets` entry:
 
 ```bash
 uv run <SCRIPT_PATH> update <name> --target <path>
-```
-
-For example:
-
-```bash
-uv run <SCRIPT_PATH> update skill-creator --target /Users/foo/.kiro/skills
 ```
 
 Report results as each completes.
 
 ## Quick shortcut
 
-If the user's intent is unambiguous (e.g. "update all my skills") AND there is only one available target, skip the selection and run:
+If the user's intent is unambiguous (e.g. "update all my skills") AND there is only one filtered target, skip the selection and run:
 
 ```bash
 uv run <SCRIPT_PATH> update --all --target <path>
 ```
 
-If there are multiple targets, still ask which one(s) to use before executing.
+If both user and project targets exist, still ask which level before executing.
